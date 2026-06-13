@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Gallery | Khan MultiServices & CSC Center</title>
+  <meta name="description" content="Take a visual tour of Khan MultiServices & CSC Center. View pictures of our digital setups, online registrations, and citizen banking facilities in Badnapur.">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==================== HEADER & NAVBAR ==================== -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="logo" aria-label="Khan MultiServices Home">
+        <div class="logo-symbol">K</div>
+        <div class="logo-text">
+          <span class="logo-main">KHAN <span class="highlight-saffron">MULTISERVICES</span></span>
+          <span class="logo-sub">CSC Center & Financial Hub</span>
+        </div>
+      </a>
+      
+      <nav class="nav-menu">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="services.html" class="nav-link">Services</a>
+        <a href="about.html" class="nav-link">About Us</a>
+        <a href="gallery.html" class="nav-link">Gallery</a>
+        <a href="testimonials.html" class="nav-link">Testimonials</a>
+        <a href="faqs.html" class="nav-link">FAQs</a>
+        <a href="contact.html" class="btn btn-primary nav-cta" style="padding: 10px 20px; font-size: 0.85rem;">Contact Us</a>
+      </nav>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle Light/Dark Theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Menu Panel Overlay -->
+  <div class="mobile-menu-overlay" id="mobileMenu">
+    <button class="close-menu-btn" id="closeMobileMenu" aria-label="Close menu">&times;</button>
+    <nav class="mobile-nav">
+      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="services.html" class="mobile-nav-link">Services</a>
+      <a href="about.html" class="mobile-nav-link">About Us</a>
+      <a href="gallery.html" class="mobile-nav-link">Gallery</a>
+      <a href="testimonials.html" class="mobile-nav-link">Testimonials</a>
+      <a href="faqs.html" class="mobile-nav-link">FAQs</a>
+    </nav>
+    <a href="contact.html" class="btn btn-primary" style="width: 200px;">Contact Us</a>
+  </div>
+
+  <!-- ==================== PAGE HERO ==================== -->
+  <section class="page-hero">
+    <div class="container">
+      <h1 class="page-hero-title">Gallery</h1>
+      <div class="breadcrumbs">
+        <a href="index.html">Home</a>
+        <span class="separator">/</span>
+        <span class="current">Gallery</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GALLERY GRID SECTION ==================== -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-badge">Visual Showcase</span>
+        <h2 class="section-title">Our Digital Workspace</h2>
+        <p class="section-desc">Take a look at how we process customer applications, run banking terminals, and organize files at our Badnapur service center.</p>
+      </div>
+
+      <div class="gallery-grid">
+        
+        <!-- Gallery Card 1 -->
+        <div class="gallery-card">
+          <!-- Premium themed SVG illustration instead of blank placeholder -->
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #1e3a8a, #0d1127); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><path d="M12 2a10 10 0 0 0-10 10c0 5.523 4.477 10 10 10s10-4.477 10-10A10 10 0 0 0 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">E-Governance</span>
+            <h4 class="gallery-title">Biometric Aadhaar Authentication</h4>
+          </div>
+        </div>
+
+        <!-- Gallery Card 2 -->
+        <div class="gallery-card">
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #0f172a, #131938); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h5M7 16h8"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Government Cards</span>
+            <h4 class="gallery-title">PAN Card Processing Console</h4>
+          </div>
+        </div>
+
+        <!-- Gallery Card 3 -->
+        <div class="gallery-card">
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #131938, #1a224c); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Financial Hub</span>
+            <h4 class="gallery-title">AEPS Cash Withdrawal Terminal</h4>
+          </div>
+        </div>
+
+        <!-- Gallery Card 4 -->
+        <div class="gallery-card">
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #0d1127, #1e3a8a); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Desktop Printing</span>
+            <h4 class="gallery-title">High-Speed Double Xerox System</h4>
+          </div>
+        </div>
+
+        <!-- Gallery Card 5 -->
+        <div class="gallery-card">
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #131938, #070913); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><path d="M17 3L21 7L17 11M21 7H9M7 21L3 17L7 13M3 17H15"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Banking</span>
+            <h4 class="gallery-title">Instant Money Transfer Gateway</h4>
+          </div>
+        </div>
+
+        <!-- Gallery Card 6 -->
+        <div class="gallery-card">
+          <div style="width: 100%; height: 100%; display: grid; place-items: center; background: linear-gradient(135deg, #1e293b, #0d1127); color: var(--clr-saffron);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="80" height="80"><path d="M22 10v6M2 10l10-5 10 5-10 5zM6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+          </div>
+          <div class="gallery-overlay">
+            <span class="gallery-category">Student Services</span>
+            <h4 class="gallery-title">Online Scholarships MahaDBT Form Filing</h4>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== LIGHTBOX MODAL CONTAINER ==================== -->
+  <div class="lightbox" id="lightboxModal">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <div class="lightbox-img-wrapper">
+      <img src="" alt="View Image" class="lightbox-img" id="lightboxImg">
+      <p class="lightbox-caption" id="lightboxCaption">Caption text</p>
+    </div>
+  </div>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <!-- Brand Column -->
+        <div class="footer-brand">
+          <a href="index.html" class="logo" style="margin-bottom: 16px;">
+            <div class="logo-symbol">K</div>
+            <div class="logo-text">
+              <span class="logo-main">KHAN <span class="highlight-saffron">MULTISERVICES</span></span>
+              <span class="logo-sub">CSC Center & Financial Hub</span>
+            </div>
+          </a>
+          <p class="footer-desc">
+            Your single-point gateway to digital certificates, identity cards, AEPS withdrawals, and utility recharges. Proudly serving Badnapur and surrounding rural areas since 2018.
+          </p>
+          <div class="footer-socials">
+            <a href="https://wa.me/919960011736" target="_blank" rel="noopener" class="social-icon" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></a>
+          </div>
+        </div>
+        
+        <!-- Navigation Column -->
+        <div>
+          <h4 class="footer-title">Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="testimonials.html">Testimonials</a></li>
+            <li><a href="faqs.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+
+        <!-- Services Column -->
+        <div>
+          <h4 class="footer-title">Top Services</h4>
+          <ul class="footer-links">
+            <li><a href="service-details.html?id=aadhaar">Aadhaar Services</a></li>
+            <li><a href="service-details.html?id=pan-card">PAN Card Center</a></li>
+            <li><a href="service-details.html?id=banking-aeps">AEPS Cash Withdrawals</a></li>
+            <li><a href="service-details.html?id=money-transfer">Money Transfers</a></li>
+            <li><a href="service-details.html?id=certificates">State Certificates</a></li>
+            <li><a href="service-details.html?id=govt-schemes">Government Schemes</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info Column -->
+        <div>
+          <h4 class="footer-title">Contact Us</h4>
+          <ul class="footer-contact">
+            <li>
+              <span class="icon">📍</span>
+              <span>Near Nasib Tea House, Main Road, Badnapur, District Jalna, Maharashtra - 431202</span>
+            </li>
+            <li>
+              <span class="icon">📞</span>
+              <span>+91 99600 11736 <br> +91 95524 40288</span>
+            </li>
+            <li>
+              <span class="icon">⏰</span>
+              <span>Mon - Sat: 9:00 AM - 8:00 PM <br> Sunday: Closed</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom">
+        <p>&copy; 2026 Khan MultiServices & CSC Center. All Rights Reserved.</p>
+        <p>Designed with ❤️ for our local community</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== FLOATING INTERACTIVE BUTTONS ==================== -->
+  <div class="floating-actions">
+    <!-- Click to Call Floating Button -->
+    <a href="tel:+919960011736" class="btn-float-call" aria-label="Call Support">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22" height="22"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </a>
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/919960011736?text=Hi%20Khan%20MultiServices!%20I%20have%20an%20enquiry%20regarding%20some%20services.%20Please%20guide%20me." target="_blank" rel="noopener" class="btn-float-wa" aria-label="WhatsApp Chat Support">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <!-- Back to Top Button -->
+    <button class="btn-back-to-top" id="backToTop" aria-label="Back to Top">▲</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
