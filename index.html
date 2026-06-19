@@ -18,6 +18,7 @@
   <meta property="og:description"
     content="Fast, Reliable & Hassle-Free Government, Banking, and Digital Services Under One Roof.">
   <meta property="og:image" content="logo.png">
+  <link rel="icon" type="image/png" href="logo.png">
 
   <!-- Style Sheets -->
   <link rel="stylesheet" href="style.css">
@@ -64,13 +65,13 @@
   </script>
 </head>
 
-<body>
+<body class="light-theme">
 
   <!-- ==================== HEADER & NAVBAR ==================== -->
   <header class="navbar">
     <div class="container nav-container">
       <a href="index.html" class="logo" aria-label="Khan MultiServices Home">
-        <div class="logo-symbol">K</div>
+        <img src="logo.png" alt="K" class="logo-symbol" style="object-fit: cover;">
         <div class="logo-text">
           <span class="logo-main">KHAN <span class="highlight-saffron">MULTISERVICES</span></span>
           <span class="logo-sub">& CSC Center</span>
@@ -78,15 +79,27 @@
       </a>
 
       <nav class="nav-menu">
-        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html" class="nav-link active">Home</a>
         <a href="services.html" class="nav-link">Services</a>
         <a href="about.html" class="nav-link">About Us</a>
         <a href="gallery.html" class="nav-link">Gallery</a>
         <a href="testimonials.html" class="nav-link">Testimonials</a>
         <a href="faqs.html" class="nav-link">FAQs</a>
-        <a href="contact.html" class="btn btn-primary nav-cta" style="padding: 10px 20px; font-size: 0.85rem;">Contact
-          Us</a>
+        <a href="contact.html" class="btn btn-outline nav-cta" style="padding: 10px 20px; font-size: 0.85rem;">Contact Us</a>
+        <a href="admin-panel.html" class="btn nav-admin-btn" title="Admin Panel" style="padding: 8px 14px; font-size: 0.75rem; font-weight: 700; background: linear-gradient(135deg, #1e3a8a, #1d4ed8); color: #fff; border: 1px solid rgba(255,255,255,0.15); border-radius: 30px; display: inline-flex; align-items: center; gap: 6px; letter-spacing: 0.4px; box-shadow: 0 2px 10px rgba(29,78,216,0.35); transition: transform 0.2s ease, box-shadow 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(29,78,216,0.55)'" onmouseout="this.style.transform=''; this.style.boxShadow='0 2px 10px rgba(29,78,216,0.35)'">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Admin
+        </a>
       </nav>
+
+      <button class="lang-toggle" id="langToggle" aria-label="Translate to Marathi">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" style="transform: translateY(-1px);">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span class="lang-text">मराठी</span>
+      </button>
 
       <button class="theme-toggle" id="themeToggle" aria-label="Toggle Light/Dark Theme">
         <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -117,14 +130,14 @@
   <div class="mobile-menu-overlay" id="mobileMenu">
     <button class="close-menu-btn" id="closeMobileMenu" aria-label="Close menu">&times;</button>
     <nav class="mobile-nav">
-      <a href="index.html" class="mobile-nav-link">Home</a>
+      <a href="index.html" class="mobile-nav-link active">Home</a>
       <a href="services.html" class="mobile-nav-link">Services</a>
       <a href="about.html" class="mobile-nav-link">About Us</a>
       <a href="gallery.html" class="mobile-nav-link">Gallery</a>
       <a href="testimonials.html" class="mobile-nav-link">Testimonials</a>
       <a href="faqs.html" class="mobile-nav-link">FAQs</a>
     </nav>
-    <a href="contact.html" class="btn btn-primary" style="width: 200px;">Contact Us</a>
+    <a href="contact.html" class="btn btn-outline nav-cta" style="width: 200px;">Contact Us</a>
   </div>
 
   <!-- ==================== HERO SECTION ==================== -->
@@ -195,14 +208,17 @@
           and securely by our certified experts.</p>
       </div>
 
-      <div class="grid-3">
+      <div class="grid-3" id="homepageEssentialServices">
         <!-- Aadhaar Card Card -->
         <div class="card-premium">
-          <div class="card-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
-              <path
-                d="M12 2a10 10 0 0 0-10 10c0 5.523 4.477 10 10 10s10-4.477 10-10A10 10 0 0 0 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
-            </svg>
+          <div class="card-icon-container" style="display: grid; place-items: center; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--clr-border); transition: var(--transition-smooth); overflow: hidden; padding: 6px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cf/Aadhaar_Logo.svg" alt="Aadhaar Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+            <div class="icon-fallback" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                <path
+                  d="M12 2a10 10 0 0 0-10 10c0 5.523 4.477 10 10 10s10-4.477 10-10A10 10 0 0 0 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z" />
+              </svg>
+            </div>
           </div>
           <h3 class="footer-title" style="margin-bottom: 12px; font-family: var(--font-title); font-size: 1.25rem;">
             Aadhaar & PAN Services</h3>
@@ -211,18 +227,24 @@
             support.
           </p>
           <a href="https://wa.me/919960011736?text=Hi%20Khan%20MultiServices%20%26%20CSC%20Center!%20I%20need%20assistance%20with%20*Aadhaar%20Services*.%20Please%20guide%20me%20on%20the%20documents%2C%20charges%2C%20and%20process.%20Thanks!"
-            target="_blank" rel="noopener" class="btn btn-wa"
-            style="padding: 10px 18px; font-size: 0.85rem;">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 6px; transform: translateY(1px);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Apply via WhatsApp</a>
+            target="_blank" rel="noopener" class="btn btn-wa" style="padding: 10px 18px; font-size: 0.85rem;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"
+              style="margin-right: 6px; transform: translateY(1px);">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>Apply via WhatsApp</a>
         </div>
 
         <!-- AEPS Cash Withdrawals -->
         <div class="card-premium">
-          <div class="card-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
-              <rect x="2" y="5" width="20" height="14" rx="2" />
-              <line x1="2" y1="10" x2="22" y2="10" />
-            </svg>
+          <div class="card-icon-container" style="display: grid; place-items: center; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--clr-border); transition: var(--transition-smooth); overflow: hidden; padding: 6px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/NPCI_logo.svg" alt="NPCI AEPS Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+            <div class="icon-fallback" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+            </div>
           </div>
           <h3 class="footer-title" style="margin-bottom: 12px; font-family: var(--font-title); font-size: 1.25rem;">AEPS
             Banking & Micro-ATM</h3>
@@ -231,17 +253,23 @@
             authentication.
           </p>
           <a href="https://wa.me/919960011736?text=Hi%20Khan%20MultiServices%20%26%20CSC%20Center!%20I%20need%20assistance%20with%20*AEPS%20%26%20Micro%20ATM*.%20Please%20guide%20me%20on%20the%20documents%2C%20charges%2C%20and%20process.%20Thanks!"
-            target="_blank" rel="noopener" class="btn btn-wa"
-            style="padding: 10px 18px; font-size: 0.85rem;">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 6px; transform: translateY(1px);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Apply via WhatsApp</a>
+            target="_blank" rel="noopener" class="btn btn-wa" style="padding: 10px 18px; font-size: 0.85rem;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"
+              style="margin-right: 6px; transform: translateY(1px);">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>Apply via WhatsApp</a>
         </div>
 
         <!-- Money Transfer -->
         <div class="card-premium">
-          <div class="card-icon-container">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
-              <path d="M17 3L21 7L17 11M21 7H9M7 21L3 17L7 13M3 17H15" />
-            </svg>
+          <div class="card-icon-container" style="display: grid; place-items: center; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--clr-border); transition: var(--transition-smooth); overflow: hidden; padding: 6px;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg" alt="UPI Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+            <div class="icon-fallback" style="display: none; width: 100%; height: 100%; align-items: center; justify-content: center;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="28" height="28">
+                <path d="M17 3L21 7L17 11M21 7H9M7 21L3 17L7 13M3 17H15" />
+              </svg>
+            </div>
           </div>
           <h3 class="footer-title" style="margin-bottom: 12px; font-family: var(--font-title); font-size: 1.25rem;">
             Instant Money Transfer</h3>
@@ -250,9 +278,12 @@
             receipts.
           </p>
           <a href="https://wa.me/919960011736?text=Hi%20Khan%20MultiServices%20%26%20CSC%20Center!%20I%20need%20assistance%20with%20*Money%20Transfer*.%20Please%20guide%20me%20on%20the%20documents%2C%20charges%2C%20and%20process.%20Thanks!"
-            target="_blank" rel="noopener" class="btn btn-wa"
-            style="padding: 10px 18px; font-size: 0.85rem;">
-            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" style="margin-right: 6px; transform: translateY(1px);"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>Apply via WhatsApp</a>
+            target="_blank" rel="noopener" class="btn btn-wa" style="padding: 10px 18px; font-size: 0.85rem;">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"
+              style="margin-right: 6px; transform: translateY(1px);">
+              <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>Apply via WhatsApp</a>
         </div>
       </div>
 
@@ -347,8 +378,7 @@
         </p>
         <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
           <a href="https://wa.me/919960011736?text=Hi%20Khan%20MultiServices!%20I%20have%20an%20enquiry%20regarding%20some%20services.%20Please%20guide%20me."
-            target="_blank" rel="noopener" class="btn btn-primary"
-            style="background: #25d366; box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);">
+            target="_blank" rel="noopener" class="btn btn-wa">
             <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" style="margin-right: 8px;">
               <path
                 d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
@@ -375,7 +405,7 @@
         <!-- Brand Column -->
         <div class="footer-brand">
           <a href="index.html" class="logo" style="margin-bottom: 16px;">
-            <div class="logo-symbol">K</div>
+            <img src="logo.png" alt="K" class="logo-symbol" style="object-fit: cover;">
             <div class="logo-text">
               <span class="logo-main">KHAN <span class="highlight-saffron">MULTISERVICES</span></span>
               <span class="logo-sub">CSC Center & Financial Hub</span>
@@ -472,6 +502,9 @@
 
   <!-- Scripts -->
   <script src="script.js"></script>
+
+
+
 </body>
 
 </html>

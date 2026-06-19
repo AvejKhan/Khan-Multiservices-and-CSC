@@ -1,0 +1,1806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Panel — Khan MultiServices CMS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --clr-bg: #080e23;
+      --clr-surface: #0f1a35;
+      --clr-card: #131f3c;
+      --clr-border: rgba(255,255,255,0.08);
+      --clr-saffron: #f97316;
+      --clr-blue: #3b82f6;
+      --clr-green: #22c55e;
+      --clr-red: #ef4444;
+      --clr-text: #e2e8f0;
+      --clr-muted: #94a3b8;
+      --font: 'Outfit', sans-serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      min-height: 100vh;
+    }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      position: fixed; top: 0; left: 0;
+      width: 260px; height: 100vh;
+      background: var(--clr-surface);
+      border-right: 1px solid var(--clr-border);
+      padding: 24px 20px;
+      display: flex; flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      display: flex; align-items: center; gap: 12px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--clr-border);
+      margin-bottom: 24px;
+    }
+    .sidebar-logo .logo-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--clr-saffron), #dc2626);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 900; color: white;
+    }
+    .sidebar-logo h1 { font-size: 0.95rem; font-weight: 700; color: white; line-height: 1.3; }
+    .sidebar-logo span { font-size: 0.7rem; color: var(--clr-muted); }
+
+    .nav-label {
+      font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1.5px; color: var(--clr-muted);
+      margin-bottom: 8px; padding: 0 8px;
+    }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border-radius: 10px;
+      color: var(--clr-muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500; margin-bottom: 4px;
+      transition: all 0.2s ease; cursor: pointer; border: none;
+      background: none; width: 100%; text-align: left;
+    }
+    .nav-link:hover, .nav-link.active {
+      background: rgba(249,115,22,0.1);
+      color: var(--clr-saffron);
+    }
+    .nav-link svg { flex-shrink: 0; }
+
+    .sidebar-footer {
+      margin-top: auto; padding-top: 20px;
+      border-top: 1px solid var(--clr-border);
+    }
+    .sidebar-footer a {
+      display: block; padding: 10px 12px; border-radius: 10px;
+      color: var(--clr-muted); text-decoration: none; font-size: 0.85rem;
+      transition: all 0.2s; text-align: center;
+      border: 1px solid var(--clr-border);
+    }
+    .sidebar-footer a:hover { background: rgba(59,130,246,0.1); color: var(--clr-blue); }
+
+    /* ---- Main Content ---- */
+    .main {
+      margin-left: 260px;
+      padding: 32px;
+      min-height: 100vh;
+    }
+
+    /* ---- Page Header ---- */
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 32px; flex-wrap: wrap; gap: 16px;
+    }
+    .page-title { font-size: 1.6rem; font-weight: 800; color: white; }
+    .page-subtitle { color: var(--clr-muted); font-size: 0.9rem; margin-top: 4px; }
+
+    .status-badge {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 16px; border-radius: 30px;
+      font-size: 0.8rem; font-weight: 600;
+    }
+    .status-badge.connected {
+      background: rgba(34,197,94,0.15);
+      color: var(--clr-green);
+      border: 1px solid rgba(34,197,94,0.3);
+    }
+    .status-badge.disconnected {
+      background: rgba(239,68,68,0.15);
+      color: var(--clr-red);
+      border: 1px solid rgba(239,68,68,0.3);
+    }
+    .status-badge.checking {
+      background: rgba(249,115,22,0.15);
+      color: var(--clr-saffron);
+      border: 1px solid rgba(249,115,22,0.3);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+
+    /* ---- Cards ---- */
+    .card {
+      background: var(--clr-card);
+      border: 1px solid var(--clr-border);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+    .card-title {
+      font-size: 1rem; font-weight: 700; color: white;
+      margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+    }
+    .card-desc { color: var(--clr-muted); font-size: 0.875rem; margin-bottom: 20px; line-height: 1.6; }
+
+    /* ---- Grid ---- */
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    @media (max-width: 900px) {
+      .grid-3 { grid-template-columns: repeat(2,1fr); }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* ---- Stats ---- */
+    .stat-card {
+      background: var(--clr-card); border: 1px solid var(--clr-border);
+      border-radius: 14px; padding: 20px;
+      display: flex; align-items: flex-start; gap: 16px;
+    }
+    .stat-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .stat-value { font-size: 1.8rem; font-weight: 800; color: white; line-height: 1; }
+    .stat-label { color: var(--clr-muted); font-size: 0.8rem; margin-top: 4px; }
+
+    /* ---- Config Section ---- */
+    .config-url-input {
+      width: 100%; padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--clr-border);
+      border-radius: 10px; color: var(--clr-text);
+      font-family: var(--font); font-size: 0.9rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+    .config-url-input:focus { border-color: var(--clr-saffron); }
+    .config-url-input::placeholder { color: var(--clr-muted); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 11px 20px; border-radius: 10px; font-family: var(--font);
+      font-size: 0.875rem; font-weight: 600; cursor: pointer;
+      border: none; transition: all 0.2s; text-decoration: none;
+    }
+    .btn-orange { background: var(--clr-saffron); color: white; }
+    .btn-orange:hover { background: #ea6a07; transform: translateY(-1px); }
+    .btn-blue { background: var(--clr-blue); color: white; }
+    .btn-blue:hover { background: #2563eb; transform: translateY(-1px); }
+    .btn-green { background: var(--clr-green); color: white; }
+    .btn-green:hover { background: #16a34a; }
+    .btn-ghost {
+      background: rgba(255,255,255,0.05); color: var(--clr-muted);
+      border: 1px solid var(--clr-border);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,0.1); color: white; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ---- Steps ---- */
+    .steps { counter-reset: steps; }
+    .step {
+      display: flex; gap: 16px; padding: 16px 0;
+      border-bottom: 1px solid var(--clr-border);
+    }
+    .step:last-child { border-bottom: none; }
+    .step-number {
+      counter-increment: steps;
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(249,115,22,0.15); border: 2px solid var(--clr-saffron);
+      color: var(--clr-saffron); font-weight: 700; font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-content h4 { font-size: 0.95rem; font-weight: 700; color: white; margin-bottom: 4px; }
+    .step-content p { color: var(--clr-muted); font-size: 0.85rem; line-height: 1.6; }
+    .step-content code {
+      background: rgba(249,115,22,0.12); color: var(--clr-saffron);
+      padding: 2px 8px; border-radius: 6px; font-size: 0.82rem;
+      font-family: monospace;
+    }
+
+    /* ---- Services Table ---- */
+    .services-table { width: 100%; border-collapse: collapse; }
+    .services-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--clr-muted);
+      border-bottom: 1px solid var(--clr-border);
+    }
+    .services-table td {
+      padding: 12px 14px; border-bottom: 1px solid var(--clr-border);
+      font-size: 0.875rem; vertical-align: middle;
+    }
+    .services-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .svc-photo-thumb {
+      width: 48px; height: 36px; object-fit: cover;
+      border-radius: 6px; border: 1px solid var(--clr-border);
+    }
+    .category-tag {
+      display: inline-block; padding: 2px 10px; border-radius: 30px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .cat-government { background: rgba(59,130,246,0.15); color: #60a5fa; }
+    .cat-banking { background: rgba(34,197,94,0.15); color: #4ade80; }
+    .cat-digital { background: rgba(168,85,247,0.15); color: #c084fc; }
+    .cat-desktop { background: rgba(249,115,22,0.15); color: #fb923c; }
+
+    .active-pill {
+      display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+    }
+    .pill-active { background: var(--clr-green); }
+    .pill-inactive { background: var(--clr-red); }
+
+    /* ---- Alert ---- */
+    .alert {
+      padding: 14px 18px; border-radius: 10px; margin-bottom: 16px;
+      font-size: 0.875rem; line-height: 1.5;
+      display: flex; align-items: flex-start; gap: 12px;
+    }
+    .alert-info { background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.25); color: #93c5fd; }
+    .alert-success { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.25); color: #86efac; }
+    .alert-warn { background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.25); color: #fdba74; }
+
+    /* ---- Sections ---- */
+    .section { display: none; }
+    .section.active { display: block; }
+
+    /* ---- Loader ---- */
+    .spinner {
+      display: inline-block; width: 20px; height: 20px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: var(--clr-saffron);
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- Copy feedback ---- */
+    .copy-feedback {
+      display: none; color: var(--clr-green); font-size: 0.78rem; margin-top: 6px;
+    }
+
+    .input-group { display: flex; gap: 10px; align-items: center; }
+    .input-group input { flex: 1; }
+
+    /* ---- Scrollbar ---- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+  </style>
+</head>
+<body style="display:none">
+
+  <!-- ============ LOGIN LOCK SCREEN ============ -->
+  <div id="lockScreen" style="
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, #080e23 0%, #0f1a35 60%, #0a0f22 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Outfit', sans-serif;
+  ">
+    <!-- Background glow effect -->
+    <div style="position:absolute; width:400px; height:400px; border-radius:50%;
+      background: radial-gradient(circle, rgba(249,115,22,0.08) 0%, transparent 70%);
+      top:50%; left:50%; transform:translate(-50%,-50%); pointer-events:none;"></div>
+
+    <div style="
+      background: rgba(19,31,60,0.9); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 24px; padding: 44px 40px; width: 100%; max-width: 400px;
+      text-align: center; box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      backdrop-filter: blur(10px); position: relative;
+    ">
+      <!-- Logo -->
+      <div style="
+        width: 68px; height: 68px; border-radius: 20px; margin: 0 auto 22px;
+        background: linear-gradient(135deg, #f97316, #dc2626);
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; font-weight: 900; color: white;
+        box-shadow: 0 8px 24px rgba(249,115,22,0.35);
+      ">K</div>
+
+      <h2 style="color:white; font-size:1.5rem; font-weight:800; margin-bottom:4px; letter-spacing:-0.5px;">
+        Khan MultiServices
+      </h2>
+      <p style="color:#64748b; font-size:0.82rem; margin-bottom:32px; letter-spacing:0.3px;">
+        🔐 Admin Panel &mdash; Sign in to continue
+      </p>
+
+      <!-- Error Message -->
+      <div id="loginError" style="
+        display:none; background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3);
+        border-radius:10px; padding:10px 14px; margin-bottom:16px;
+        color:#fca5a5; font-size:0.82rem; text-align:left;
+      "></div>
+
+      <!-- Email Field -->
+      <div style="margin-bottom:14px; text-align:left;">
+        <label style="display:block; color:#94a3b8; font-size:0.75rem; font-weight:600;
+          text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">ID</label>
+        <input type="text" id="adminEmail"
+          placeholder="Enter your Admin ID"
+          onkeydown="if(event.key==='Enter') document.getElementById('adminPass').focus()"
+          style="
+            width: 100%; padding: 13px 16px; box-sizing:border-box;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: white;
+            font-family: 'Outfit', sans-serif; font-size: 0.92rem;
+            outline: none; transition: border-color 0.2s, background 0.2s;
+          "
+          onfocus="this.style.borderColor='#f97316'; this.style.background='rgba(249,115,22,0.06)'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='rgba(255,255,255,0.05)'"
+        />
+      </div>
+
+      <!-- Password Field -->
+      <div style="margin-bottom:22px; text-align:left;">
+        <label style="display:block; color:#94a3b8; font-size:0.75rem; font-weight:600;
+          text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Password</label>
+        <div style="position:relative;">
+          <input type="password" id="adminPass"
+            placeholder="Enter your password"
+            onkeydown="if(event.key==='Enter') doLogin()"
+            style="
+              width: 100%; padding: 13px 44px 13px 16px; box-sizing:border-box;
+              background: rgba(255,255,255,0.05);
+              border: 1px solid rgba(255,255,255,0.1);
+              border-radius: 12px; color: white;
+              font-family: 'Outfit', sans-serif; font-size: 0.92rem;
+              outline: none; transition: border-color 0.2s, background 0.2s;
+            "
+            onfocus="this.style.borderColor='#f97316'; this.style.background='rgba(249,115,22,0.06)'"
+            onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='rgba(255,255,255,0.05)'"
+          />
+          <!-- Show/Hide Password Toggle -->
+          <button onclick="togglePass()" type="button" style="
+            position:absolute; right:12px; top:50%; transform:translateY(-50%);
+            background:none; border:none; cursor:pointer; color:#64748b; padding:4px;
+            display:flex; align-items:center; transition:color 0.2s;
+          " onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#64748b'" title="Show/hide password">
+            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <button onclick="doLogin()" id="loginBtn" style="
+        width: 100%; padding: 14px;
+        background: linear-gradient(135deg, #f97316, #dc2626);
+        border: none; border-radius: 12px;
+        color: white; font-family: 'Outfit', sans-serif;
+        font-size: 1rem; font-weight: 700; cursor: pointer;
+        transition: opacity 0.2s, transform 0.2s;
+        box-shadow: 0 6px 20px rgba(249,115,22,0.35);
+        letter-spacing: 0.3px;
+      "
+      onmouseover="this.style.opacity='0.92'; this.style.transform='translateY(-1px)'"
+      onmouseout="this.style.opacity='1'; this.style.transform=''">
+        Sign In to Admin Panel
+      </button>
+
+      <p style="color:#334155; font-size:0.7rem; margin-top:24px;">
+        🔒 Restricted Access &mdash; Khan MultiServices &amp; CSC Center
+      </p>
+    </div>
+  </div>
+  <!-- ============ END LOCK SCREEN ============ -->
+
+  <script>
+    // ===== LOGIN CREDENTIALS =====
+    const ADMIN_EMAIL    = 'avej.csc@gmail.com';
+    const ADMIN_PASSWORD = 'Avej@123';
+
+    function doLogin() {
+      const email    = document.getElementById('adminEmail').value.trim().toLowerCase();
+      const password = document.getElementById('adminPass').value;
+      const errEl    = document.getElementById('loginError');
+      const btn      = document.getElementById('loginBtn');
+
+      // Clear previous error
+      errEl.style.display = 'none';
+
+      // Validate
+      if (!email) {
+        showError('⚠️ Please enter your Email ID.');
+        document.getElementById('adminEmail').focus();
+        return;
+      }
+      if (!password) {
+        showError('⚠️ Please enter your Password.');
+        document.getElementById('adminPass').focus();
+        return;
+      }
+
+      // Check credentials
+      if (email !== ADMIN_EMAIL) {
+        showError('❌ Email ID not recognized. Please check and try again.');
+        document.getElementById('adminEmail').select();
+        return;
+      }
+      if (password !== ADMIN_PASSWORD) {
+        showError('❌ Incorrect Password. Please try again.');
+        document.getElementById('adminPass').value = '';
+        document.getElementById('adminPass').focus();
+        return;
+      }
+
+      // Success — animate button then unlock
+      btn.innerHTML = '✅ Login Successful! Opening...';
+      btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+      btn.disabled = true;
+
+      setTimeout(() => {
+        sessionStorage.setItem('khan_admin_auth', '1');
+        document.getElementById('lockScreen').style.display = 'none';
+        document.body.style.display = '';
+      }, 700);
+    }
+
+    function showError(msg) {
+      const errEl = document.getElementById('loginError');
+      errEl.innerHTML = msg;
+      errEl.style.display = 'block';
+      // Shake animation
+      errEl.style.animation = 'none';
+      errEl.offsetHeight; // reflow
+      errEl.style.animation = 'shake 0.4s ease';
+    }
+
+    function togglePass() {
+      const passInput = document.getElementById('adminPass');
+      const eyeIcon   = document.getElementById('eyeIcon');
+      if (passInput.type === 'password') {
+        passInput.type = 'text';
+        eyeIcon.innerHTML = `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>`;
+      } else {
+        passInput.type = 'password';
+        eyeIcon.innerHTML = `<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>`;
+      }
+    }
+
+    // Add shake keyframe
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes shake {
+        0%,100%{transform:translateX(0)}
+        20%{transform:translateX(-6px)}
+        40%{transform:translateX(6px)}
+        60%{transform:translateX(-4px)}
+        80%{transform:translateX(4px)}
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Auto-unlock if already authenticated this session
+    if (sessionStorage.getItem('khan_admin_auth') === '1') {
+      document.getElementById('lockScreen').style.display = 'none';
+      document.body.style.display = '';
+    } else {
+      document.getElementById('lockScreen').style.display = 'flex';
+      document.body.style.display = '';
+    }
+  </script>
+
+
+
+
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">K</div>
+      <div>
+        <h1>Khan MultiServices</h1>
+        <span>Admin Panel</span>
+      </div>
+    </div>
+
+    <p class="nav-label">Navigation</p>
+    <button class="nav-link active" onclick="showSection('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button>
+    <button class="nav-link" onclick="showSection('editor')" style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      ✏️ Edit Services
+      <span style="position:absolute; right:8px; top:50%; transform:translateY(-50%); background:var(--clr-green); color:white; font-size:0.55rem; font-weight:800; padding:1px 6px; border-radius:30px;">NO SHEET</span>
+    </button>
+    <button class="nav-link" onclick="showSection('setup')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.07 13.07l-3.54-3.54A5 5 0 0 0 12 7V3.05A9.98 9.98 0 0 1 19.07 4.93z"/></svg>
+      Sheet Setup
+    </button>
+    <button class="nav-link" onclick="showSection('services')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 17H5a2 2 0 0 0-2 2"/><path d="M9 7H5a2 2 0 0 0-2 2"/><path d="M12 2v20"/><path d="M19 9V7a2 2 0 0 0-2-2h-5"/><path d="M19 17v-5"/></svg>
+      Services List
+    </button>
+    <button class="nav-link" onclick="showSection('test')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><polyline points="20 6 9 17 4 12"/></svg>
+      Test Connection
+    </button>
+    <button class="nav-link" onclick="showSection('approvals')" id="approvalNavBtn" style="position:relative;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Approvals
+      <span id="approvalBadge" style="display:none; position:absolute; right:10px; top:50%; transform:translateY(-50%); background:var(--clr-saffron); color:white; font-size:0.6rem; font-weight:800; padding:2px 7px; border-radius:30px; letter-spacing:0.5px;">PENDING</span>
+    </button>
+
+    <div class="sidebar-footer">
+      <a href="index.html">← Back to Website</a>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- =================== DASHBOARD =================== -->
+    <section id="section-dashboard" class="section active">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Dashboard</h2>
+          <p class="page-subtitle">Manage your Khan MultiServices website from here</p>
+        </div>
+        <div id="connectionStatus" class="status-badge checking">
+          <span class="status-dot"></span>
+          <span>Checking Sheet...</span>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(249,115,22,0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" width="22" height="22"><path d="M9 17H5a2 2 0 0 0-2 2"/><path d="M12 2v20"/><path d="M15 7h4a2 2 0 0 1 2 2v1"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="totalServicesCount">25</div>
+            <div class="stat-label">Total Services</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(34,197,94,0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2" width="22" height="22"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="activeServicesCount">—</div>
+            <div class="stat-label">Active Services</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:rgba(59,130,246,0.15)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" width="22" height="22"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          </div>
+          <div>
+            <div class="stat-value" id="sheetStatusShort">—</div>
+            <div class="stat-label">Google Sheet</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sheetUrlBanner" class="alert alert-warn" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <div>
+          <strong>Google Sheet Not Connected.</strong> The website is using built-in service data.
+          Go to <strong>Sheet Setup</strong> to connect your Google Sheet for easy editing.
+        </div>
+      </div>
+
+      <div id="sheetConnectedBanner" class="alert alert-success" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+        <div>
+          <strong>Google Sheet is Connected!</strong> Any changes you make in your Google Sheet will automatically appear on the website.
+          <a href="#" onclick="showSection('services')" style="color:inherit; font-weight:700;"> View Live Services →</a>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-saffron)" stroke-width="2" width="18" height="18"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Quick Actions
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top: 12px;">
+            <a href="#" onclick="showSection('setup')" class="btn btn-orange">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.07 13.07l-3.54-3.54A5 5 0 0 0 12 7V3.05"/></svg>
+              Connect Google Sheet
+            </a>
+            <a href="#" onclick="window.open(document.getElementById('sheetUrl').value, '_blank')" class="btn btn-ghost" id="openSheetBtn" style="pointer-events:none; opacity:0.4">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Open My Google Sheet
+            </a>
+            <a href="services.html" target="_blank" class="btn btn-ghost">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Preview Services Page
+            </a>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-blue)" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            How It Works
+          </div>
+          <div style="margin-top:12px; display:flex; flex-direction:column; gap:10px;">
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="width:22px; height:22px; border-radius:50%; background:rgba(249,115,22,0.2); color:var(--clr-saffron); font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">1</span>
+              <p style="color:var(--clr-muted); font-size:0.83rem;">Set up your Google Sheet with the Apps Script template</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="width:22px; height:22px; border-radius:50%; background:rgba(249,115,22,0.2); color:var(--clr-saffron); font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">2</span>
+              <p style="color:var(--clr-muted); font-size:0.83rem;">Paste your Web App URL in the Setup section below</p>
+            </div>
+            <div style="display:flex; gap:12px; align-items:flex-start;">
+              <span style="width:22px; height:22px; border-radius:50%; background:rgba(249,115,22,0.2); color:var(--clr-saffron); font-size:0.7rem; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;">3</span>
+              <p style="color:var(--clr-muted); font-size:0.83rem;">Edit anything in the sheet — changes show instantly on your website!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== SETUP =================== -->
+    <section id="section-setup" class="section">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Google Sheet Setup</h2>
+          <p class="page-subtitle">Follow these steps to connect your Google Sheet as a CMS</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-saffron)" stroke-width="2" width="18" height="18"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Step-by-Step Guide
+        </div>
+        <div class="card-desc">Follow these steps exactly. You only need to do this once.</div>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Create Google Sheet & Open Apps Script</h4>
+              <p>Go to <a href="https://sheets.new" target="_blank" style="color:var(--clr-saffron)">sheets.new</a> to create a new Google Sheet. Give it a name (e.g. "Khan Services"). In the top menu, click on <strong>Extensions &gt; Apps Script</strong>.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Paste the Script Code</h4>
+              <p>Open the file <code>khan-services-sheet.gs</code> from your website folder. Copy ALL the code inside it. Paste it in the Apps Script editor (replace existing code). Press <code>Ctrl+S</code> to save.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Create Template Sheet</h4>
+              <p>In the Apps Script editor, select the function <code>createTemplateSheet</code> from the dropdown. Click the ▶ <strong>Run</strong> button. Allow permissions when asked. This creates your Google Sheet with all 25 services pre-filled!</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>Deploy as Web App</h4>
+              <p>Click <strong>Deploy → New Deployment</strong>. Select type: <code>Web App</code>. Set "Execute as": <code>Me</code>. Set "Who has access": <code>Anyone</code>. Click <strong>Deploy</strong> and allow permissions.</p>
+            </div>
+          </div>
+          <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Copy Your Web App URL</h4>
+              <p>After deploying, you'll see a URL like <code>https://script.google.com/macros/s/AKfycb.../exec</code>. Copy that URL and paste it below!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-green)" stroke-width="2" width="18" height="18"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          Paste Your Web App URL
+        </div>
+        <div class="card-desc">This URL connects your website to your Google Sheet.</div>
+
+        <div class="input-group" style="margin-bottom: 12px;">
+          <input type="url" id="sheetUrl" class="config-url-input"
+            placeholder="https://script.google.com/macros/s/AKfycb.../exec" />
+          <button class="btn btn-orange" onclick="saveSheetUrl()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            Save & Connect
+          </button>
+        </div>
+        <p class="copy-feedback" id="saveFeedback">✅ URL saved! The website will now load services from your Google Sheet.</p>
+
+        <div class="alert alert-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>The URL is saved on this computer's browser storage (localStorage). You need to do this once per device/browser.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== SERVICES LIST =================== -->
+    <section id="section-services" class="section">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Services List</h2>
+          <p class="page-subtitle">Live preview of services being shown on your website</p>
+        </div>
+        <button class="btn btn-ghost" onclick="loadServicesPreview()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Refresh
+        </button>
+      </div>
+
+      <div id="servicesTableContainer" class="card">
+        <div style="text-align:center; padding:40px; color:var(--clr-muted);">
+          <div class="spinner" style="width:32px; height:32px; border-width:3px; margin:0 auto 16px;"></div>
+          <p>Loading services data...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== TEST =================== -->
+    <section id="section-test" class="section">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Test Connection</h2>
+          <p class="page-subtitle">Check if your Google Sheet is properly connected</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Connection Test</div>
+        <div class="card-desc">Click the button below to test if your Google Sheet URL is working correctly.</div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-orange" onclick="testConnection()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Run Connection Test
+          </button>
+          <button class="btn btn-ghost" onclick="clearConfig()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Reset to Local Data
+          </button>
+        </div>
+        <div id="testOutput" style="margin-top:20px; display:none;"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Column Guide for Your Sheet</div>
+        <div class="card-desc">Your Google Sheet must have these exact column names in row 1:</div>
+        <table class="services-table">
+          <thead>
+            <tr>
+              <th>Column Name</th>
+              <th>What to Write</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code style="color:var(--clr-saffron)">id</code></td><td>Unique URL slug (no spaces)</td><td>aadhaar, pan-card</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">title</code></td><td>Service display name</td><td>Aadhaar Services</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">category</code></td><td>government / banking / digital / desktop</td><td>government</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">photo</code></td><td>Image URL or local file path</td><td>images/aadhaar_demo.png</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">logo</code></td><td>Official logo URL (optional)</td><td>https://...</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">desc</code></td><td>Short 1-2 sentence description</td><td>Biometric updates...</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">fee</code></td><td>Fee information</td><td>As per UIDAI guidelines</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">duration</code></td><td>Processing time</td><td>3 - 7 Working Days</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">details</code></td><td>Full paragraph description</td><td>We assist with...</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">documents</code></td><td>Items separated by | (pipe)</td><td>Aadhaar Card|PAN Card</td></tr>
+            <tr><td><code style="color:var(--clr-saffron)">active</code></td><td>TRUE to show, FALSE to hide</td><td>TRUE</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =================== EDIT SERVICES =================== -->
+    <section id="section-editor" class="section">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">✏️ Edit Services</h2>
+          <p class="page-subtitle">Click any service below to edit it — no Google Sheet needed!</p>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-blue" onclick="addNewService()" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add New Service
+          </button>
+          <button class="btn btn-ghost" onclick="resetEditorToDefault()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reset to Default
+          </button>
+          <button class="btn btn-green" onclick="publishEditorData()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            Publish to Website
+          </button>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-bottom:24px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div><strong>No Google Sheet needed!</strong> Click any service card to edit its details. When done, click <strong>Publish to Website</strong> to make changes live instantly.</div>
+      </div>
+
+      <!-- Services grid -->
+      <div id="editorGrid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px;"></div>
+    </section>
+
+    <!-- =================== EDIT MODAL =================== -->
+    <div id="editModal" style="display:none; position:fixed; inset:0; z-index:9998; background:rgba(0,0,0,0.7); backdrop-filter:blur(4px); align-items:center; justify-content:center; padding:20px;">
+      <div style="background:var(--clr-card); border:1px solid var(--clr-border); border-radius:20px; width:100%; max-width:600px; max-height:90vh; overflow-y:auto; padding:32px; position:relative;">
+        <button onclick="closeEditModal()" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.05); border:1px solid var(--clr-border); border-radius:8px; color:var(--clr-muted); cursor:pointer; padding:6px 10px; font-size:1rem;">&times;</button>
+
+        <div style="margin-bottom:24px;">
+          <div id="editModalIcon" style="font-size:2rem; margin-bottom:8px;"></div>
+          <h3 id="editModalTitle" style="font-size:1.2rem; font-weight:800; color:white;"></h3>
+          <p style="color:var(--clr-muted); font-size:0.8rem;">Service ID: <code id="editModalId" style="color:var(--clr-saffron);"></code></p>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <!-- Title -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Service Title</label>
+            <input type="text" id="edit_title" class="config-url-input" placeholder="e.g. Aadhaar Services">
+          </div>
+          <!-- Short Description -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Short Description (shown on card)</label>
+            <textarea id="edit_desc" class="config-url-input" rows="2" style="resize:vertical;"></textarea>
+          </div>
+          <!-- Fee -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Fee / Charges</label>
+            <input type="text" id="edit_fee" class="config-url-input" placeholder="e.g. As per UIDAI guidelines">
+          </div>
+          <!-- Duration -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Processing Time</label>
+            <input type="text" id="edit_duration" class="config-url-input" placeholder="e.g. 3 - 7 Working Days">
+          </div>
+          <!-- Photo URL -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">📷 Service Photo URL <span style="font-weight:400; text-transform:none; letter-spacing:0; color:#64748b;">(image shown on card & details page)</span></label>
+            <input type="url" id="edit_photo" class="config-url-input" placeholder="e.g. https://... or images/aadhaar_demo.png">
+            <div id="edit_photo_preview" style="margin-top:8px; display:none; border-radius:8px; overflow:hidden; height:80px; border:1px solid var(--clr-border);">
+              <img id="edit_photo_img" src="" alt="Preview" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <!-- Logo URL -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">🏷️ Logo / Icon URL <span style="font-weight:400; text-transform:none; letter-spacing:0; color:#64748b;">(small logo shown on card corner)</span></label>
+            <input type="url" id="edit_logo" class="config-url-input" placeholder="e.g. https://upload.wikimedia.org/...">
+          </div>
+          <!-- Full Details -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Full Details (Service Details Page)</label>
+            <textarea id="edit_details" class="config-url-input" rows="4" style="resize:vertical;"></textarea>
+          </div>
+          <!-- Category -->
+          <div>
+            <label style="display:block; color:var(--clr-muted); font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:6px;">Category</label>
+            <select id="edit_category" class="config-url-input" style="appearance:none; cursor:pointer;">
+              <option value="government">Government</option>
+              <option value="banking">Banking</option>
+              <option value="digital">Digital</option>
+              <option value="desktop">Desktop / Printing</option>
+            </select>
+          </div>
+          <!-- Active Toggle -->
+          <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03); border:1px solid var(--clr-border); border-radius:10px; padding:14px 18px;">
+            <div>
+              <div style="color:white; font-weight:600; font-size:0.9rem;">Show on Website</div>
+              <div style="color:var(--clr-muted); font-size:0.78rem;">Turn off to hide this service from visitors</div>
+            </div>
+            <label style="position:relative; display:inline-block; width:46px; height:26px; cursor:pointer;">
+              <input type="checkbox" id="edit_active" style="opacity:0; width:0; height:0;" onchange="updateToggleStyle(this)">
+              <span id="edit_active_track" style="position:absolute; inset:0; border-radius:30px; background:var(--clr-border); transition:0.3s;"></span>
+              <span id="edit_active_thumb" style="position:absolute; left:3px; top:3px; width:20px; height:20px; border-radius:50%; background:white; transition:0.3s;"></span>
+            </label>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-top:24px;">
+          <button class="btn btn-ghost" onclick="closeEditModal()" style="flex:1;">Cancel</button>
+          <button class="btn btn-red" id="deleteServiceBtn" onclick="deleteCurrentService()" style="flex:1; background:rgba(239,68,68,0.15); color:#fca5a5; border:1px solid rgba(239,68,68,0.3);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Delete
+          </button>
+          <button class="btn btn-orange" onclick="saveEditModal()" style="flex:2;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/></svg>
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <section id="section-approvals" class="section">
+      <div class="page-header">
+        <div>
+          <h2 class="page-title">Content Approvals</h2>
+          <p class="page-subtitle">Review changes from your Google Sheet before publishing to the website</p>
+        </div>
+        <button class="btn btn-orange" onclick="fetchPendingFromSheet()" id="fetchPendingBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Fetch Latest from Sheet
+        </button>
+      </div>
+
+      <!-- How it works info -->
+      <div class="alert alert-info" style="margin-bottom:24px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <div>
+          <strong>How Approvals Work:</strong> When you edit your Google Sheet, changes are <em>not</em> shown on the website automatically.
+          Click <strong>Fetch Latest from Sheet</strong> to load the new data here. Review the changes, then click <strong>Approve &amp; Publish</strong> to make them live.
+        </div>
+      </div>
+
+      <!-- Published status -->
+      <div id="publishedStatus" class="card" style="margin-bottom:24px;">
+        <div class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-green)" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+          Currently Published Version
+        </div>
+        <div id="publishedStatusInfo" style="color:var(--clr-muted); font-size:0.875rem; margin-top:8px;">Loading...</div>
+      </div>
+
+      <!-- Pending fetch result -->
+      <div id="pendingSection" style="display:none;">
+        <div class="card">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+            <div class="card-title" style="margin-bottom:0;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--clr-saffron)" stroke-width="2" width="18" height="18"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              Pending Changes — Awaiting Approval
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="btn btn-ghost" onclick="rejectPending()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                Discard Changes
+              </button>
+              <button class="btn btn-green" onclick="approvePending()" id="approveBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg>
+                Approve &amp; Publish
+              </button>
+            </div>
+          </div>
+          <div id="pendingChangeSummary" class="alert alert-warn" style="margin-bottom:16px; display:none;"></div>
+          <div style="overflow-x:auto;">
+            <table class="services-table" id="pendingTable">
+              <thead><tr>
+                <th>Status</th>
+                <th>Service Name</th>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Fee</th>
+                <th>Active</th>
+              </tr></thead>
+              <tbody id="pendingTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty / loading states -->
+      <div id="approvalLoader" style="display:none; text-align:center; padding:60px; color:var(--clr-muted);">
+        <div class="spinner" style="width:36px; height:36px; border-width:3px; margin:0 auto 16px;"></div>
+        <p>Fetching latest data from Google Sheet...</p>
+      </div>
+      <div id="approvalEmpty" style="display:none; text-align:center; padding:60px; color:var(--clr-muted);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="48" height="48" style="margin:0 auto 16px; display:block; opacity:0.3"><path d="M9 12l2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <h3 style="color:white; margin-bottom:8px;">All Up to Date</h3>
+        <p>No pending changes. Your Google Sheet and website are in sync.</p>
+      </div>
+      <div id="approvalNoSheet" class="alert alert-warn" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        <div>No Google Sheet connected. Go to <strong>Sheet Setup</strong> to connect your sheet first.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // ========== Navigation ==========
+    function showSection(name) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      document.getElementById('section-' + name).classList.add('active');
+      const sectionNames = ['dashboard','editor','setup','services','test','approvals'];
+      const idx = sectionNames.indexOf(name);
+      if (idx >= 0) document.querySelectorAll('.nav-link')[idx].classList.add('active');
+
+      if (name === 'services') loadServicesPreview();
+      if (name === 'approvals') initApprovalsSection();
+      if (name === 'editor') initEditorSection();
+    }
+
+    // ========== Config Persistence ==========
+    const STORAGE_KEY = 'khan_sheet_url';
+
+    function getSheetUrl() {
+      return localStorage.getItem(STORAGE_KEY) || '';
+    }
+
+    function saveSheetUrl() {
+      const url = document.getElementById('sheetUrl').value.trim();
+      if (!url) { alert('Please paste your Web App URL first!'); return; }
+      if (!url.startsWith('https://script.google.com')) {
+        alert('This doesn\'t look like a Google Apps Script URL. Please check and try again.');
+        return;
+      }
+      localStorage.setItem(STORAGE_KEY, url);
+
+      // Also save to script.js config hint
+      const feedback = document.getElementById('saveFeedback');
+      feedback.style.display = 'block';
+      setTimeout(() => feedback.style.display = 'none', 4000);
+
+      checkConnection();
+
+      // Enable open sheet button
+      const btn = document.getElementById('openSheetBtn');
+      btn.style.pointerEvents = 'auto';
+      btn.style.opacity = '1';
+    }
+
+    function clearConfig() {
+      if (!confirm('Reset to local data? This will disconnect your Google Sheet.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('sheetUrl').value = '';
+      updateDashboard(false, 0);
+    }
+
+    // ========== Load on Page Start ==========
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedUrl = getSheetUrl();
+      if (savedUrl) {
+        document.getElementById('sheetUrl').value = savedUrl;
+        const btn = document.getElementById('openSheetBtn');
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+      }
+      checkConnection();
+    });
+
+    // ========== Check Connection ==========
+    async function checkConnection() {
+      const url = getSheetUrl();
+      const statusEl = document.getElementById('connectionStatus');
+      const statusShort = document.getElementById('sheetStatusShort');
+
+      if (!url) {
+        statusEl.className = 'status-badge disconnected';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>Not Connected</span>';
+        statusShort.textContent = 'Not Set';
+        updateDashboard(false, 0);
+        return;
+      }
+
+      statusEl.className = 'status-badge checking';
+      statusEl.innerHTML = '<span class="status-dot"></span><span>Checking...</span>';
+
+      try {
+        const res = await fetch(url + '?_=' + Date.now());
+        const data = await res.json();
+
+        if (Array.isArray(data)) {
+          statusEl.className = 'status-badge connected';
+          statusEl.innerHTML = '<span class="status-dot"></span><span>Connected ✓</span>';
+          statusShort.textContent = 'Connected';
+          updateDashboard(true, data.length);
+        } else {
+          throw new Error(data.error || 'Invalid response');
+        }
+      } catch (e) {
+        statusEl.className = 'status-badge disconnected';
+        statusEl.innerHTML = '<span class="status-dot"></span><span>Error — Check URL</span>';
+        statusShort.textContent = 'Error';
+        updateDashboard(false, 0);
+      }
+    }
+
+    function updateDashboard(connected, count) {
+      document.getElementById('activeServicesCount').textContent = connected ? count : '25*';
+      document.getElementById('sheetUrlBanner').style.display = connected ? 'none' : 'flex';
+      document.getElementById('sheetConnectedBanner').style.display = connected ? 'flex' : 'none';
+    }
+
+    // ========== Services Preview ==========
+    async function loadServicesPreview() {
+      const container = document.getElementById('servicesTableContainer');
+      container.innerHTML = `<div style="text-align:center; padding:40px; color:var(--clr-muted);"><div class="spinner" style="width:32px;height:32px;border-width:3px;margin:0 auto 16px;"></div><p>Loading services...</p></div>`;
+
+      const url = getSheetUrl();
+      let services = [];
+      let source = 'Local Backup';
+
+      if (url) {
+        try {
+          const res = await fetch(url + '?_=' + Date.now());
+          services = await res.json();
+          source = 'Google Sheet ✓';
+        } catch (e) {
+          source = 'Local Backup (Sheet Error)';
+          services = getFallbackServices();
+        }
+      } else {
+        services = getFallbackServices();
+      }
+
+      if (!Array.isArray(services) || services.length === 0) {
+        container.innerHTML = `<p style="color:var(--clr-muted); text-align:center; padding:40px;">No services found. Check your sheet URL.</p>`;
+        return;
+      }
+
+      const catClass = { government: 'cat-government', banking: 'cat-banking', digital: 'cat-digital', desktop: 'cat-desktop' };
+
+      let html = `
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div class="card-title">Services — <span style="color:var(--clr-muted); font-weight:500; font-size:0.8rem;">${source}</span></div>
+          <span style="color:var(--clr-muted); font-size:0.8rem;">${services.length} services</span>
+        </div>
+        <div style="overflow-x:auto;">
+        <table class="services-table">
+          <thead><tr>
+            <th>Photo</th>
+            <th>Service Name</th>
+            <th>ID</th>
+            <th>Category</th>
+            <th>Fee</th>
+            <th>Duration</th>
+            <th>Status</th>
+          </tr></thead>
+          <tbody>`;
+
+      services.forEach(svc => {
+        const isActive = (svc.active || 'TRUE').toUpperCase() !== 'FALSE';
+        const cat = (svc.category || 'government').toLowerCase();
+        html += `<tr>
+          <td><img src="${svc.photo || 'images/aadhaar_demo.png'}" alt="" class="svc-photo-thumb" onerror="this.src='https://via.placeholder.com/48x36/1e3a8a/fff?text=?'"></td>
+          <td style="font-weight:600; color:white;">${svc.title || '—'}</td>
+          <td style="font-family:monospace; color:var(--clr-muted); font-size:0.78rem;">${svc.id || '—'}</td>
+          <td><span class="category-tag ${catClass[cat] || 'cat-government'}">${cat}</span></td>
+          <td style="color:var(--clr-muted); font-size:0.8rem; max-width:150px;">${svc.fee || '—'}</td>
+          <td style="color:var(--clr-muted); font-size:0.8rem;">${svc.duration || '—'}</td>
+          <td><span class="active-pill ${isActive ? 'pill-active' : 'pill-inactive'}" title="${isActive ? 'Active' : 'Hidden'}"></span></td>
+        </tr>`;
+      });
+
+      html += `</tbody></table></div>`;
+      container.innerHTML = html;
+    }
+
+    // ========== Test Connection ==========
+    async function testConnection() {
+      const url = getSheetUrl();
+      const output = document.getElementById('testOutput');
+      output.style.display = 'block';
+
+      if (!url) {
+        output.innerHTML = `<div class="alert alert-warn">⚠️ No URL configured. Go to <strong>Sheet Setup</strong> to add your Web App URL first.</div>`;
+        return;
+      }
+
+      output.innerHTML = `<div class="alert alert-info"><span class="spinner"></span> &nbsp; Testing connection to: <code>${url.substring(0, 60)}...</code></div>`;
+
+      try {
+        const startTime = Date.now();
+        const res = await fetch(url + '?_=' + Date.now());
+        const elapsed = Date.now() - startTime;
+        const data = await res.json();
+
+        if (Array.isArray(data)) {
+          output.innerHTML = `<div class="alert alert-success">
+            ✅ <strong>Connection Successful!</strong><br>
+            Fetched <strong>${data.length} services</strong> from your Google Sheet in <strong>${elapsed}ms</strong>.<br>
+            Your website is now using live Google Sheet data!
+          </div>`;
+          updateDashboard(true, data.length);
+        } else {
+          throw new Error(data.error || 'Unexpected response format');
+        }
+      } catch (e) {
+        output.innerHTML = `<div class="alert" style="background:rgba(239,68,68,0.12); border-color:rgba(239,68,68,0.25); color:#fca5a5;">
+          ❌ <strong>Connection Failed:</strong> ${e.message}<br><br>
+          <strong>Possible fixes:</strong><br>
+          • Check the URL is correct and not expired<br>
+          • Re-deploy the script (Deploy → Manage Deployments)<br>
+          • Make sure "Who has access" is set to "Anyone"<br>
+          • Try opening the URL directly in your browser
+        </div>`;
+      }
+    }
+
+    function clearConfig() {
+      if (!confirm('Reset to local data? This will disconnect your Google Sheet.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      document.getElementById('sheetUrl').value = '';
+      const output = document.getElementById('testOutput');
+      output.style.display = 'block';
+      output.innerHTML = `<div class="alert alert-warn">🔄 Disconnected. Website will use built-in service data.</div>`;
+      updateDashboard(false, 0);
+    }
+
+    // ========== Fallback Services (just titles for display) ==========
+    function getFallbackServices() {
+      return [
+        { id:'aadhaar', title:'Aadhaar Services', category:'government', photo:'images/aadhaar_demo.png', fee:'As per UIDAI guidelines', duration:'3 - 7 Working Days', active:'TRUE' },
+        { id:'pan-card', title:'PAN Card Services', category:'government', photo:'images/pan_demo.png', fee:'NSDL fees + processing', duration:'Instant / 10-15 Days', active:'TRUE' },
+        { id:'voter-id', title:'Voter ID Services', category:'government', photo:'images/voter_id_demo.png', fee:'Free (PVC print charges)', duration:'15 - 30 Working Days', active:'TRUE' },
+        { id:'passport', title:'Passport Assistance', category:'government', photo:'images/passport_demo.png', fee:'Govt fee + consultation', duration:'Depends on verification', active:'TRUE' },
+        { id:'certificates', title:'Income/Caste/Domicile', category:'government', photo:'images/caste_cert_demo.png', fee:'MahaOnline rates', duration:'7 - 15 Working Days', active:'TRUE' },
+        { id:'birth-death-cert', title:'Birth & Death Certificate', category:'government', photo:'', fee:'Govt fees', duration:'5 - 10 Working Days', active:'TRUE' },
+        { id:'govt-schemes', title:'Government Schemes', category:'government', photo:'', fee:'Minimal processing', duration:'Varies', active:'TRUE' },
+        { id:'banking-aeps', title:'AEPS & Micro ATM', category:'banking', photo:'images/aeps_demo.png', fee:'Zero charge', duration:'Instant', active:'TRUE' },
+        { id:'money-transfer', title:'Money Transfer', category:'banking', photo:'images/money_transfer_demo.png', fee:'IMPS charges', duration:'1-2 Minutes', active:'TRUE' },
+        { id:'insurance', title:'Insurance Services', category:'banking', photo:'', fee:'Policy premium', duration:'10-20 Minutes', active:'TRUE' },
+        { id:'utility-bills', title:'Utility Bill Payments', category:'digital', photo:'images/utility_bills_demo.png', fee:'Zero fees', duration:'Instant', active:'TRUE' },
+        { id:'recharge', title:'Mobile & DTH Recharge', category:'digital', photo:'', fee:'Plan pricing', duration:'Instant', active:'TRUE' },
+        { id:'scholarships', title:'Scholarship Applications', category:'digital', photo:'images/scholarship_demo.png', fee:'Submission charges', duration:'24 Hours', active:'TRUE' },
+        { id:'exam-forms', title:'Exam & Admission Forms', category:'digital', photo:'', fee:'Exam fee', duration:'Immediate', active:'TRUE' },
+        { id:'xerox-print', title:'Printing & Photocopy', category:'desktop', photo:'', fee:'Per-page pricing', duration:'Instant', active:'TRUE' },
+        { id:'scanning', title:'Document Scanning', category:'desktop', photo:'', fee:'Per-document', duration:'Instant', active:'TRUE' },
+        { id:'lamination', title:'Lamination Services', category:'desktop', photo:'', fee:'Paper size basis', duration:'2-5 Minutes', active:'TRUE' },
+        { id:'online-registrations', title:'Online Registrations', category:'digital', photo:'', fee:'Consultation + Govt fees', duration:'3-7 Working Days', active:'TRUE' },
+        { id:'rto-services', title:'Driving License & RTO', category:'government', photo:'images/driving_license_demo.png', fee:'Govt + RTO fees', duration:'15-30 Working Days', active:'TRUE' },
+        { id:'ration-card', title:'Ration Card Services', category:'government', photo:'images/ration_card_demo.png', fee:'Portal charges', duration:'15-30 Working Days', active:'TRUE' },
+        { id:'itr-gst', title:'ITR & GST Filing', category:'banking', photo:'images/itr_gst_demo.png', fee:'Consultation based', duration:'2-3 Working Days', active:'TRUE' },
+        { id:'epfo-services', title:'EPF & Pension Services', category:'banking', photo:'', fee:'Portal fees', duration:'7-15 Days', active:'TRUE' },
+        { id:'travel-booking', title:'Travel Ticket Booking', category:'digital', photo:'images/travel_demo.png', fee:'Ticket fare', duration:'Instant', active:'TRUE' },
+        { id:'gas-booking', title:'Gas Cylinder Services', category:'digital', photo:'', fee:'Cylinder cost', duration:'Instant', active:'TRUE' },
+        { id:'digital-signature', title:'Digital Signature (DSC)', category:'digital', photo:'', fee:'Token + registration', duration:'24-48 Hours', active:'TRUE' }
+      ];
+    }
+
+    // ========== APPROVAL SYSTEM ==========
+    const APPROVED_KEY = 'khan_approved_services';
+    const PENDING_KEY  = 'khan_pending_services';
+
+    // Initialize the approvals section view
+    function initApprovalsSection() {
+      // Show published status
+      const publishedRaw = localStorage.getItem(APPROVED_KEY);
+      const statusEl = document.getElementById('publishedStatusInfo');
+      if (publishedRaw) {
+        try {
+          const published = JSON.parse(publishedRaw);
+          const ts = localStorage.getItem('khan_approved_ts') || 'Unknown time';
+          statusEl.innerHTML = `
+            <span style="color:var(--clr-green); font-weight:700;">✅ ${published.length} services published</span>
+            &nbsp;·&nbsp; Last approved: <strong>${ts}</strong>
+            &nbsp;·&nbsp; <a href="#" onclick="unpublishAll(); return false;" style="color:var(--clr-red); font-size:0.8rem;">Unpublish All</a>
+          `;
+        } catch(e) {
+          statusEl.textContent = 'Published data appears corrupt. Please re-approve.';
+        }
+      } else {
+        statusEl.innerHTML = '<span style="color:var(--clr-muted);">⚠️ No approved data yet. Website is using built-in local data or direct sheet data.</span>';
+      }
+
+      // Check if there's stored pending data
+      const pendingRaw = localStorage.getItem(PENDING_KEY);
+      if (pendingRaw) {
+        try {
+          const pending = JSON.parse(pendingRaw);
+          showPendingTable(pending);
+          document.getElementById('approvalBadge').style.display = 'inline';
+        } catch(e) {
+          hidePendingUI();
+        }
+      } else {
+        hidePendingUI();
+        document.getElementById('approvalEmpty').style.display = 'block';
+      }
+    }
+
+    function hidePendingUI() {
+      document.getElementById('pendingSection').style.display = 'none';
+      document.getElementById('approvalLoader').style.display = 'none';
+      document.getElementById('approvalEmpty').style.display = 'none';
+      document.getElementById('approvalNoSheet').style.display = 'none';
+    }
+
+    // Fetch latest data from Google Sheet into pending state
+    async function fetchPendingFromSheet() {
+      const url = localStorage.getItem('khan_sheet_url');
+      if (!url) {
+        hidePendingUI();
+        document.getElementById('approvalNoSheet').style.display = 'flex';
+        return;
+      }
+
+      hidePendingUI();
+      document.getElementById('approvalLoader').style.display = 'block';
+      document.getElementById('fetchPendingBtn').disabled = true;
+      document.getElementById('fetchPendingBtn').textContent = 'Fetching...';
+
+      try {
+        const res = await fetch(url + '?_=' + Date.now());
+        const data = await res.json();
+
+        if (!Array.isArray(data) || data.length === 0) throw new Error('Empty or invalid response');
+
+        // Save as pending
+        localStorage.setItem(PENDING_KEY, JSON.stringify(data));
+        document.getElementById('approvalBadge').style.display = 'inline';
+
+        hidePendingUI();
+        showPendingTable(data);
+
+      } catch(e) {
+        hidePendingUI();
+        document.getElementById('approvalLoader').style.display = 'none';
+        document.getElementById('pendingSection').style.display = 'block';
+        document.getElementById('pendingChangeSummary').style.display = 'flex';
+        document.getElementById('pendingChangeSummary').className = 'alert alert-warn';
+        document.getElementById('pendingChangeSummary').innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          <span>Failed to fetch: <strong>${e.message}</strong>. Check your sheet URL and connection.</span>
+        `;
+      } finally {
+        document.getElementById('fetchPendingBtn').disabled = false;
+        document.getElementById('fetchPendingBtn').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Fetch Latest from Sheet';
+      }
+    }
+
+    // Build and show the pending table with change diff
+    function showPendingTable(pending) {
+      hidePendingUI();
+      document.getElementById('pendingSection').style.display = 'block';
+
+      // Compare with currently published
+      let publishedMap = {};
+      const publishedRaw = localStorage.getItem(APPROVED_KEY);
+      if (publishedRaw) {
+        try {
+          JSON.parse(publishedRaw).forEach(s => publishedMap[s.id] = s);
+        } catch(e) {}
+      }
+
+      let newCount = 0, changedCount = 0, unchangedCount = 0;
+      const catClass = { government:'cat-government', banking:'cat-banking', digital:'cat-digital', desktop:'cat-desktop' };
+
+      const rows = pending.map(svc => {
+        const existing = publishedMap[svc.id];
+        const isActive = (svc.active || 'TRUE').toString().toUpperCase() !== 'FALSE';
+        let rowStatus = '';
+        let rowStyle = '';
+
+        if (!existing) {
+          newCount++;
+          rowStatus = '<span style="background:rgba(34,197,94,0.2); color:#4ade80; padding:2px 8px; border-radius:20px; font-size:0.7rem; font-weight:700;">NEW</span>';
+          rowStyle = 'background:rgba(34,197,94,0.04);';
+        } else {
+          const hasChange = (svc.title !== existing.title || svc.fee !== existing.fee ||
+            svc.duration !== existing.duration || svc.category !== existing.category ||
+            (svc.active || 'TRUE').toString() !== (existing.active || 'TRUE').toString());
+          if (hasChange) {
+            changedCount++;
+            rowStatus = '<span style="background:rgba(249,115,22,0.2); color:#fb923c; padding:2px 8px; border-radius:20px; font-size:0.7rem; font-weight:700;">CHANGED</span>';
+            rowStyle = 'background:rgba(249,115,22,0.04);';
+          } else {
+            unchangedCount++;
+            rowStatus = '<span style="background:rgba(100,116,139,0.2); color:#94a3b8; padding:2px 8px; border-radius:20px; font-size:0.7rem; font-weight:700;">SAME</span>';
+          }
+        }
+
+        const cat = (svc.category || 'government').toLowerCase();
+        return `<tr style="${rowStyle}">
+          <td>${rowStatus}</td>
+          <td style="font-weight:600; color:white;">${svc.title || '—'}</td>
+          <td style="font-family:monospace; color:var(--clr-muted); font-size:0.78rem;">${svc.id || '—'}</td>
+          <td><span class="category-tag ${catClass[cat] || 'cat-government'}">${cat}</span></td>
+          <td style="color:var(--clr-muted); font-size:0.8rem; max-width:140px;">${svc.fee || '—'}</td>
+          <td><span class="active-pill ${isActive ? 'pill-active' : 'pill-inactive'}" title="${isActive ? 'Active' : 'Hidden'}"></span> ${isActive ? 'Active' : 'Hidden'}</td>
+        </tr>`;
+      }).join('');
+
+      document.getElementById('pendingTableBody').innerHTML = rows;
+
+      // Summary banner
+      const summaryEl = document.getElementById('pendingChangeSummary');
+      if (newCount > 0 || changedCount > 0) {
+        summaryEl.style.display = 'flex';
+        summaryEl.className = 'alert alert-warn';
+        summaryEl.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+          <span>
+            Detected <strong>${newCount} new service(s)</strong>, <strong>${changedCount} change(s)</strong>, and <strong>${unchangedCount} unchanged</strong>.
+            Review the table below, then click <strong>Approve &amp; Publish</strong> to make changes live.
+          </span>
+        `;
+      } else {
+        summaryEl.style.display = 'flex';
+        summaryEl.className = 'alert alert-success';
+        summaryEl.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><path d="M8 12l3 3 5-5"/></svg>
+          <span>No changes detected compared to current published version. All ${unchangedCount} services are identical. You can still approve to re-publish.</span>
+        `;
+      }
+    }
+
+    // Approve and publish pending to website
+    function approvePending() {
+      const pendingRaw = localStorage.getItem(PENDING_KEY);
+      if (!pendingRaw) { alert('No pending data to approve.'); return; }
+
+      const btn = document.getElementById('approveBtn');
+      btn.disabled = true;
+      btn.textContent = 'Publishing...';
+
+      setTimeout(() => {
+        try {
+          const pending = JSON.parse(pendingRaw);
+          const now = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+
+          localStorage.setItem(APPROVED_KEY, JSON.stringify(pending));
+          localStorage.setItem('khan_approved_ts', now);
+          localStorage.removeItem(PENDING_KEY);
+
+          document.getElementById('approvalBadge').style.display = 'none';
+
+          // Success feedback
+          document.getElementById('pendingSection').style.display = 'none';
+          document.getElementById('approvalEmpty').style.display = 'none';
+
+          const statusEl = document.getElementById('publishedStatusInfo');
+          statusEl.innerHTML = `
+            <span style="color:var(--clr-green); font-weight:700;">✅ ${pending.length} services published</span>
+            &nbsp;·&nbsp; Last approved: <strong>${now}</strong>
+            &nbsp;·&nbsp; <a href="#" onclick="unpublishAll(); return false;" style="color:var(--clr-red); font-size:0.8rem;">Unpublish All</a>
+          `;
+
+          // Show success toast
+          showApprovalToast(`✅ ${pending.length} services approved & published to website!`, 'success');
+
+        } catch(e) {
+          showApprovalToast('❌ Approval failed: ' + e.message, 'error');
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><polyline points="20 6 9 17 4 12"/></svg> Approve & Publish';
+
+        // Show empty state
+        document.getElementById('approvalEmpty').style.display = 'block';
+      }, 600);
+    }
+
+    // Discard pending changes
+    function rejectPending() {
+      if (!confirm('Discard these pending changes? They will not be published.')) return;
+      localStorage.removeItem(PENDING_KEY);
+      document.getElementById('approvalBadge').style.display = 'none';
+      hidePendingUI();
+      document.getElementById('approvalEmpty').style.display = 'block';
+      showApprovalToast('🗑️ Pending changes discarded.', 'warn');
+    }
+
+    // Remove all approved data (revert to direct sheet / local)
+    function unpublishAll() {
+      if (!confirm('Remove approved data? The website will fall back to direct sheet data (or local if no sheet).')) return;
+      localStorage.removeItem(APPROVED_KEY);
+      localStorage.removeItem('khan_approved_ts');
+      document.getElementById('publishedStatusInfo').innerHTML = '<span style="color:var(--clr-muted);">⚠️ No approved data. Website is using built-in local data or direct sheet data.</span>';
+      showApprovalToast('⚠️ Published data removed. Website reverted to fallback.', 'warn');
+    }
+
+    // Toast notification
+    function showApprovalToast(msg, type) {
+      let toast = document.getElementById('approvalToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'approvalToast';
+        toast.style.cssText = 'position:fixed; bottom:28px; right:28px; padding:14px 22px; border-radius:12px; font-family:Outfit,sans-serif; font-size:0.875rem; font-weight:600; z-index:99999; opacity:0; transform:translateY(12px); transition:all 0.3s ease; max-width:340px; box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+        document.body.appendChild(toast);
+      }
+      const colors = { success:'rgba(34,197,94,0.18)', error:'rgba(239,68,68,0.18)', warn:'rgba(249,115,22,0.18)' };
+      const textColors = { success:'#4ade80', error:'#fca5a5', warn:'#fdba74' };
+      const borders = { success:'1px solid rgba(34,197,94,0.35)', error:'1px solid rgba(239,68,68,0.35)', warn:'1px solid rgba(249,115,22,0.35)' };
+      toast.style.background = colors[type] || colors.success;
+      toast.style.color = textColors[type] || textColors.success;
+      toast.style.border = borders[type] || borders.success;
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateY(0)';
+      setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateY(12px)'; }, 3500);
+    }
+
+    // Check badge on load
+    window.addEventListener('DOMContentLoaded', () => {
+      if (localStorage.getItem(PENDING_KEY)) {
+        document.getElementById('approvalBadge').style.display = 'inline';
+      }
+    });
+
+    // ========== BUILT-IN SERVICE EDITOR ==========
+    let editorData = []; // working copy of services in editor
+    let editingIndex = -1; // which service is open in modal
+
+    // Category color map
+    const editorCatColors = {
+      government: { bg: 'rgba(59,130,246,0.15)', text: '#60a5fa' },
+      banking:    { bg: 'rgba(34,197,94,0.15)',  text: '#4ade80' },
+      digital:    { bg: 'rgba(168,85,247,0.15)', text: '#c084fc' },
+      desktop:    { bg: 'rgba(249,115,22,0.15)', text: '#fb923c' }
+    };
+
+    // Category emoji icons
+    const catEmoji = { government:'🏛️', banking:'🏦', digital:'💻', desktop:'🖨️' };
+
+    // Load editor section with current data
+    function initEditorSection() {
+      // Load from approved > local fallback
+      const approvedRaw = localStorage.getItem('khan_approved_services');
+      const editorRaw   = localStorage.getItem('khan_editor_draft');
+
+      if (editorRaw) {
+        try { editorData = JSON.parse(editorRaw); } catch(e) { editorData = []; }
+      }
+
+      if (!editorData.length) {
+        if (approvedRaw) {
+          try { editorData = JSON.parse(approvedRaw); } catch(e) { editorData = []; }
+        }
+      }
+
+      if (!editorData.length) {
+        // Load from inline SERVICES_DATA equivalent (fallback list)
+        editorData = getEditorDefaultData();
+      }
+
+      renderEditorGrid();
+    }
+
+    function renderEditorGrid() {
+      const grid = document.getElementById('editorGrid');
+      if (!editorData.length) {
+        grid.innerHTML = '<p style="color:var(--clr-muted); grid-column:1/-1; text-align:center; padding:40px;">No services found.</p>';
+        return;
+      }
+
+      grid.innerHTML = editorData.map((svc, idx) => {
+        const cat = (svc.category || 'government').toLowerCase();
+        const colors = editorCatColors[cat] || editorCatColors.government;
+        const isActive = (svc.active === false || (svc.active || 'TRUE').toString().toUpperCase() === 'FALSE') ? false : true;
+        const emoji = catEmoji[cat] || '📋';
+        const photoHtml = svc.photo ? `<div style="margin:-20px -20px 14px -20px; height:90px; overflow:hidden; border-radius:14px 14px 0 0;"><img src="${svc.photo}" alt="" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.display='none'"></div>` : '';
+        return `
+          <div onclick="openEditModal(${idx})" style="
+            background:var(--clr-card); border:1px solid ${isActive ? 'var(--clr-border)' : 'rgba(239,68,68,0.3)'};
+            border-radius:14px; padding:20px; cursor:pointer;
+            transition:all 0.2s ease; position:relative; overflow:hidden;
+            opacity:${isActive ? '1' : '0.6'};
+          " onmouseover="this.style.borderColor='var(--clr-saffron)'; this.style.transform='translateY(-2px)'"
+             onmouseout="this.style.borderColor='${isActive ? 'var(--clr-border)' : 'rgba(239,68,68,0.3)'}'; this.style.transform=''">
+            ${photoHtml}
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:12px;">
+              <div style="font-size:1.6rem;">${emoji}</div>
+              <span style="background:${colors.bg}; color:${colors.text}; padding:2px 10px; border-radius:20px; font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">${cat}</span>
+            </div>
+            <h4 style="color:white; font-size:0.95rem; font-weight:700; margin-bottom:6px; line-height:1.3;">${svc.title || '<em style="color:var(--clr-muted);">Untitled Service</em>'}</h4>
+            <p style="color:var(--clr-muted); font-size:0.78rem; margin-bottom:12px; line-height:1.5; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${svc.desc || svc.description || '—'}</p>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <span style="color:var(--clr-saffron); font-size:0.75rem; font-weight:600;">💰 ${svc.fee || '—'}</span>
+              <span style="font-size:0.7rem; padding:2px 8px; border-radius:20px; font-weight:700; ${isActive ? 'background:rgba(34,197,94,0.15); color:#4ade80;' : 'background:rgba(239,68,68,0.15); color:#fca5a5;'}">${isActive ? '● Active' : '● Hidden'}</span>
+            </div>
+            <div style="position:absolute; top:${svc.photo ? '100px' : '12px'}; right:10px; background:rgba(249,115,22,0.12); border-radius:6px; padding:4px 8px; font-size:0.65rem; color:var(--clr-saffron); font-weight:600;">✏️ EDIT</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openEditModal(idx) {
+      editingIndex = idx;
+      const svc = editorData[idx];
+      const cat = (svc.category || 'government').toLowerCase();
+      const emoji = catEmoji[cat] || '📋';
+      const isActive = (svc.active === false || (svc.active || 'TRUE').toString().toUpperCase() === 'FALSE') ? false : true;
+
+      document.getElementById('editModalIcon').textContent = emoji;
+      document.getElementById('editModalTitle').textContent = svc.title || 'Service';
+      document.getElementById('editModalId').textContent = svc.id || '—';
+      document.getElementById('edit_title').value    = svc.title || '';
+      document.getElementById('edit_desc').value     = svc.desc || svc.description || '';
+      document.getElementById('edit_fee').value      = svc.fee || '';
+      document.getElementById('edit_duration').value = svc.duration || '';
+      document.getElementById('edit_details').value  = svc.details || '';
+      document.getElementById('edit_category').value = cat;
+      document.getElementById('edit_photo').value    = svc.photo || '';
+      document.getElementById('edit_logo').value     = svc.logo || '';
+
+      // Show photo preview if URL exists
+      updatePhotoPreview(svc.photo || '');
+
+      // Hide delete for new services (editingIndex set to editorData.length means new)
+      document.getElementById('deleteServiceBtn').style.display = idx < editorData.length ? 'inline-flex' : 'none';
+
+      const chk = document.getElementById('edit_active');
+      chk.checked = isActive;
+      updateToggleStyle(chk);
+
+      const modal = document.getElementById('editModal');
+      modal.style.display = 'flex';
+      setTimeout(() => modal.querySelector('div').scrollTop = 0, 10);
+    }
+
+    function updatePhotoPreview(url) {
+      const preview = document.getElementById('edit_photo_preview');
+      const img     = document.getElementById('edit_photo_img');
+      if (url) {
+        img.src = url;
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+    }
+
+    // Live preview on photo URL input
+    document.getElementById('edit_photo').addEventListener('input', function() {
+      updatePhotoPreview(this.value.trim());
+    });
+
+    function addNewService() {
+      // Push a blank placeholder
+      const newSvc = {
+        id: 'new-service-' + Date.now(),
+        title: '',
+        category: 'government',
+        photo: '',
+        logo: '',
+        desc: '',
+        fee: '',
+        duration: '',
+        details: '',
+        documents: [],
+        active: 'TRUE'
+      };
+      editorData.push(newSvc);
+      const newIdx = editorData.length - 1;
+
+      // Open the modal for the new item
+      editingIndex = newIdx;
+      document.getElementById('editModalIcon').textContent = '🆕';
+      document.getElementById('editModalTitle').textContent = 'New Service';
+      document.getElementById('editModalId').textContent = newSvc.id;
+      document.getElementById('edit_title').value    = '';
+      document.getElementById('edit_desc').value     = '';
+      document.getElementById('edit_fee').value      = '';
+      document.getElementById('edit_duration').value = '';
+      document.getElementById('edit_details').value  = '';
+      document.getElementById('edit_category').value = 'government';
+      document.getElementById('edit_photo').value    = '';
+      document.getElementById('edit_logo').value     = '';
+      updatePhotoPreview('');
+
+      // Hide delete button for brand new
+      document.getElementById('deleteServiceBtn').style.display = 'none';
+
+      const chk = document.getElementById('edit_active');
+      chk.checked = true;
+      updateToggleStyle(chk);
+
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function deleteCurrentService() {
+      if (editingIndex < 0) return;
+      const svc = editorData[editingIndex];
+      if (!confirm(`Delete "${svc.title || 'this service'}"? This cannot be undone.`)) return;
+      editorData.splice(editingIndex, 1);
+      localStorage.setItem('khan_editor_draft', JSON.stringify(editorData));
+      closeEditModal();
+      renderEditorGrid();
+      showApprovalToast('🗑️ Service deleted. Click Publish to apply.', 'warn');
+    }
+
+    function closeEditModal() {
+      document.getElementById('editModal').style.display = 'none';
+      editingIndex = -1;
+    }
+
+    function updateToggleStyle(chk) {
+      const track = document.getElementById('edit_active_track');
+      const thumb = document.getElementById('edit_active_thumb');
+      if (chk.checked) {
+        track.style.background = 'var(--clr-green)';
+        thumb.style.transform = 'translateX(20px)';
+      } else {
+        track.style.background = 'var(--clr-border)';
+        thumb.style.transform = 'translateX(0)';
+      }
+    }
+
+    function saveEditModal() {
+      if (editingIndex < 0) return;
+      const isActive = document.getElementById('edit_active').checked;
+      const titleVal = document.getElementById('edit_title').value.trim();
+
+      if (!titleVal) {
+        showApprovalToast('⚠️ Please enter a Service Title before saving.', 'warn');
+        document.getElementById('edit_title').focus();
+        return;
+      }
+
+      editorData[editingIndex] = {
+        ...editorData[editingIndex],
+        title:    titleVal,
+        desc:     document.getElementById('edit_desc').value.trim(),
+        fee:      document.getElementById('edit_fee').value.trim(),
+        duration: document.getElementById('edit_duration').value.trim(),
+        details:  document.getElementById('edit_details').value.trim(),
+        category: document.getElementById('edit_category').value,
+        photo:    document.getElementById('edit_photo').value.trim(),
+        logo:     document.getElementById('edit_logo').value.trim(),
+        active:   isActive ? 'TRUE' : 'FALSE'
+      };
+
+      // Save draft
+      localStorage.setItem('khan_editor_draft', JSON.stringify(editorData));
+
+      closeEditModal();
+      renderEditorGrid();
+      showApprovalToast('✅ Changes saved! Click "Publish to Website" to make them live.', 'success');
+    }
+
+    function publishEditorData() {
+      if (!editorData.length) { alert('No data to publish.'); return; }
+      const now = new Date().toLocaleString('en-IN', { timeZone:'Asia/Kolkata', day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+      localStorage.setItem('khan_approved_services', JSON.stringify(editorData));
+      localStorage.setItem('khan_approved_ts', now);
+      localStorage.removeItem('khan_editor_draft');
+      showApprovalToast(`🚀 ${editorData.length} services published to website!`, 'success');
+    }
+
+    function resetEditorToDefault() {
+      if (!confirm('Reset all services to original default data? All your edits will be lost.')) return;
+      localStorage.removeItem('khan_editor_draft');
+      localStorage.removeItem('khan_approved_services');
+      localStorage.removeItem('khan_approved_ts');
+      editorData = getEditorDefaultData();
+      renderEditorGrid();
+      showApprovalToast('🔄 Reset to default data. Click Publish to apply.', 'warn');
+    }
+
+    // Close modal on backdrop click
+    document.getElementById('editModal').addEventListener('click', function(e) {
+      if (e.target === this) closeEditModal();
+    });
+
+    function getEditorDefaultData() {
+      return [
+        { id:'aadhaar', title:'Aadhaar Services', category:'government', photo:'images/aadhaar_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/c/cf/Aadhaar_Logo.svg', desc:'Biometric updates, demographic corrections, mobile linking, and e-Aadhaar downloads.', fee:'As per UIDAI guidelines', duration:'3 - 7 Working Days', active:'TRUE', details:'We assist with new Aadhaar enrollment guidance, mandatory biometric updates, address corrections, name/date of birth edits, mobile number linking, and instant PVC card printing.', documents:['Identity Proof','Address Proof','Active Mobile Number'] },
+        { id:'pan-card', title:'PAN Card Services', category:'government', photo:'images/pan_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/0/07/Income_Tax_Department_India.png', desc:'Instant E-PAN, new applications, corrections, reprints, and Aadhaar linking.', fee:'Official NSDL fees + minimal processing charges', duration:'Instant E-PAN / 10-15 Days for Physical Card', active:'TRUE', details:'Apply for a new Permanent Account Number (PAN) card for individuals, partners, or businesses. We also handle correction of misspelled names, signature mismatches, reprint of lost cards, and Aadhaar linking.', documents:['Aadhaar Card','Proof of Date of Birth','2 Recent Passport Size Photos'] },
+        { id:'voter-id', title:'Voter ID Services', category:'government', photo:'images/voter_id_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/1/1b/ECI_Logo.svg', desc:'New voter registrations, corrections, card shifts, and digital voter card downloads.', fee:'Free Govt Service (Processing charges apply for PVC print)', duration:'15 - 30 Working Days', active:'TRUE', details:'Get registered in the voter lists. We assist in filling Form 6 (new voter), Form 8 (corrections, address shifts, photo replacements), and downloadable digital e-EPIC cards on official NVSP portals.', documents:['Aadhaar Card','Age Proof','Address Proof','1 passport size photo'] },
+        { id:'passport', title:'Passport Assistance', category:'government', photo:'images/passport_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'Fresh passport application, renewals, document checklist, and slot booking.', fee:'Govt. fee paid online + consultation charges', duration:'Slot booking in 2 days. Issue time depends on Police Verification.', active:'TRUE', details:'Hassle-free application for Fresh and Re-issue of Passports under Normal and Tatkaal categories. We handle form filling, document checklist creation, payment execution, and appointment slot booking at PSK.', documents:['Aadhaar Card','PAN Card','10th Class Marksheet','Recent Address Proof'] },
+        { id:'certificates', title:'Income/Caste/Domicile', category:'government', photo:'images/caste_cert_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/2/23/Seal_of_Maharashtra.svg', desc:'Official state certificates for domicile, income declaration, caste status, and non-creamy layer.', fee:'As per MahaOnline rates', duration:'7 - 15 Working Days', active:'TRUE', details:'Apply for standard government certificates issued by Revenue Department. These certificates are crucial for educational admissions, scholarships, and reservation benefits.', documents:['Ration Card','School Leaving Certificate','Self-Declaration','Talasildar Income Report'] },
+        { id:'birth-death-cert', title:'Birth & Death Certificate', category:'government', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'Assistance in municipal/panchayat registrations and retrieving certificates.', fee:'Standard government fees + portal charges', duration:'5 - 10 Working Days', active:'TRUE', details:'We guide you in submitting applications for registering births and deaths at local administrative bodies, correcting minor spelling errors, and fetching digital prints of certified records.', documents:['Hospital discharge card','Aadhaar Card of parents/deceased','Address proof'] },
+        { id:'govt-schemes', title:'Government Schemes', category:'government', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/9/9f/Digital_India_logo.svg', desc:'Applications for PM-Kisan, Sanjay Gandhi Niradhar, Ration Card, and E-Shram.', fee:'Minimal processing charges', duration:'Varies by department approvals', active:'TRUE', details:'Help in applying and checking statuses for major central & state schemes like PM-Kisan Samman Nidhi, MahaDBT, Pradhan Mantri Awas Yojana, Ayushman Bharat health card, and E-Shram registrations.', documents:['Aadhaar Card','Ration Card','Bank Passbook Details','Income Proof'] },
+        { id:'banking-aeps', title:'AEPS & Micro ATM', category:'banking', photo:'images/aeps_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/e/e4/NPCI_logo.svg', desc:'Cash withdrawals, balance enquiry, and mini statements using Aadhaar verification.', fee:'Zero charge for standard withdrawals', duration:'Instant Cash Payout', active:'TRUE', details:'Withdraw cash safely using Aadhaar Enabled Payment System (AEPS) and Micro-ATM services. No need to visit distant bank branches; carry out basic banking operations instantly in your local neighborhood.', documents:['Aadhaar Card (linked with bank account)','Account Holder must be physically present'] },
+        { id:'money-transfer', title:'Money Transfer', category:'banking', photo:'images/money_transfer_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/e/e1/UPI-Logo-vector.svg', desc:'Instant domestic money transfers to any bank branch in India, 24/7.', fee:'Standard banking IMPS charges (slab-based)', duration:'Instant Settlement (1 - 2 Minutes)', active:'TRUE', details:'Send money instantly to your family, suppliers, or business accounts anywhere in India. Transactions are processed via IMPS/DMT gateways ensuring highest security and receipt generation.', documents:['Beneficiary Bank Name','Account Number','IFSC Code','Sender Mobile Number'] },
+        { id:'insurance', title:'Insurance Services', category:'banking', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'Two-wheeler, four-wheeler, health, life, and crop insurance policies.', fee:'Premium based on policy selection', duration:'Instant Policy Generation (10 - 20 Minutes)', active:'TRUE', details:'Protect your assets. We compare and issue instant vehicle insurance (third party & comprehensive), health plans, and crop insurance renewals to safeguard local agricultural investments.', documents:['Previous Policy Copy','Vehicle RC Book','Aadhaar / PAN of owner'] },
+        { id:'utility-bills', title:'Utility Bill Payments', category:'digital', photo:'images/utility_bills_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/b/b5/Bharat_BillPay_logo.svg', desc:'Electricity, water, cooking gas, broadband, and post-paid billing payments.', fee:'Zero convenience fees', duration:'Instant Payment Receipt', active:'TRUE', details:'Pay electricity bills (MSEDCL/MSEB), piped gas, water tax, DTH, landline, and broadband bills online. Avoid long queues and late payment penalties with instant confirmation.', documents:['Consumer Account Number','Previous Bill Copy'] },
+        { id:'recharge', title:'Mobile & DTH Recharge', category:'digital', photo:'', logo:'', desc:'Super fast recharges for Jio, Airtel, Vi, BSNL, Tata Play, Dish TV, and Airtel DTH.', fee:'Direct plan pricing', duration:'Instant Active Recharge', active:'TRUE', details:'Instant recharges with real-time plan exploration. We help select the best value-added packs, data plans, international roaming, and DTH annual vouchers.', documents:['Mobile / DTH Customer Number','Operator Name'] },
+        { id:'scholarships', title:'Scholarship Applications', category:'digital', photo:'images/scholarship_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/9/9f/Digital_India_logo.svg', desc:'MahaDBT, Pre-metric, Post-metric, and National scholarship form submissions.', fee:'Form submission charges apply', duration:'Within 24 Hours', active:'TRUE', details:'We handle step-by-step applications for MahaDBT portal, National Scholarship Portal (NSP), minority scholarships, and specialized fellowships to ensure students don\'t miss out on educational aid.', documents:['Aadhaar Card','Caste Certificate','Income Certificate','Previous Year Marksheet','College Fee Receipt'] },
+        { id:'exam-forms', title:'Exam & Admission Forms', category:'digital', photo:'', logo:'', desc:'Online forms for SSC, HSC, NEET, JEE, CET, and university admissions.', fee:'Exam Fee (Actuals) + Online portal processing fee', duration:'Immediate execution and printout', active:'TRUE', details:'Avoid mistakes in competitive exam registrations. We accurately submit forms for NEET, JEE, MH-CET, Police Bharti, Railway exams, and regional college admissions.', documents:['Academic Marksheets','Recent Photograph (Digitized)','Signature (Digitized)','Caste/EWS certificate'] },
+        { id:'xerox-print', title:'Printing & Photocopy', category:'desktop', photo:'', logo:'', desc:'High quality black-and-white, color printing, photocopy (Xerox), and bulk prints.', fee:'Per-page pricing (Very economical)', duration:'Instant delivery', active:'TRUE', details:'Get high-speed double-sided photocopies, premium color brochures, legal drafts, resume printing, study material copies, and project documentation printed on premium paper sheets.', documents:['Digital documents via Email/WhatsApp/USB'] },
+        { id:'scanning', title:'Document Scanning', category:'desktop', photo:'', logo:'', desc:'PDF creation, image resizing, and scanning certificates for online submissions.', fee:'Per-document nominal rates', duration:'Instant digital delivery', active:'TRUE', details:'We scan educational marksheets, blueprints, land documents, and signatures into crystal clear PDFs or JPEG images. We also compress file sizes to comply with government upload thresholds.', documents:['Physical papers/certificates to scan'] },
+        { id:'lamination', title:'Lamination Services', category:'desktop', photo:'', logo:'', desc:'Protect your crucial identity cards, marksheets, and legal papers from damage.', fee:'Nominal fees based on paper size', duration:'Instant (2 - 5 Minutes)', active:'TRUE', details:'Premium lamination using thick, waterproof pouches. Safeguard your Aadhaar cards, PAN cards, degree certificates, and agricultural transcripts from moisture and wear.', documents:['Physical cards/marksheet/agreements'] },
+        { id:'online-registrations', title:'Online Registrations', category:'digital', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'Shop Act licences, Food (FSSAI) licences, Udyam registration, and digital signatures.', fee:'Consultation + official government registration fees', duration:'3 - 7 Working Days', active:'TRUE', details:'Legal business registrations for shops, retail centers, and small cottage units. Get your Udyam registration, Shop Act licenses, and GST application filings managed cleanly.', documents:['Aadhaar Card','PAN Card','Business Location Proof','Bank Account Info'] },
+        { id:'rto-services', title:'Driving License & RTO', category:'government', photo:'images/driving_license_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:"Learner's test booking, fresh driving licenses, renewals, and RC book reprints.", fee:'Govt charges + RTO processing fees', duration:'15 - 30 Working Days', active:'TRUE', details:'Complete RTO support: online application for learner\'s license, slot booking for physical driving tests, permanent license applications, address updates on RC/License, and smart-card replacement assistance.', documents:['Aadhaar Card','Age Proof','Physical Fitness Self-Declaration','Recent Passport Size Photos'] },
+        { id:'ration-card', title:'Ration Card Services', category:'government', photo:'images/ration_card_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'New Ration Card applications, member addition or deletion, and corrections.', fee:'Nominal online portal charges', duration:'15 - 30 Working Days', active:'TRUE', details:'Apply for new ration cards (yellow, saffron, white) or modify existing cards. We support adding new members, deleting members, splitting family cards, and shop transfers.', documents:['Aadhaar Cards of all family members','Income Certificate','Gas Connection book','Self-Declaration Form','Electricity Bill'] },
+        { id:'itr-gst', title:'ITR & GST Filing', category:'banking', photo:'images/itr_gst_demo.png', logo:'https://upload.wikimedia.org/wikipedia/commons/0/07/Income_Tax_Department_India.png', desc:'Income Tax filing for individuals, salaried employees, and GST return submissions.', fee:'Consultation based on filing complexity', duration:'2 - 3 Working Days', active:'TRUE', details:'Stay compliant with digital tax filing. We assist local merchants, salaried professionals, and farmers to file their annual Income Tax Returns (ITR) and process monthly/quarterly GST returns securely.', documents:['PAN Card & Aadhaar Card','Form 16 & Form 26AS','Bank Account statements (12 months)','Business Sale/Purchase details'] },
+        { id:'epfo-services', title:'EPF & Pension Services', category:'banking', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/a/ad/Emblem_of_India.svg', desc:'PF balance checks, KYC updates, online withdrawals, and life certificates (Jeevan Pramaan).', fee:'Nominal portal processing fees', duration:'Claim settlements in 7 - 15 days', active:'TRUE', details:'EPFO employee portal services: check balance sheets, merge multiple PF accounts, update missing bank KYC/signatures, file online claims for advance/full PF withdrawal, and submit digital Jeevan Pramaan life certificates for pensioners.', documents:['Universal Account Number (UAN)','Aadhaar Card linked with active mobile','Bank account Passbook','PAN Card'] },
+        { id:'travel-booking', title:'Travel Ticket Booking', category:'digital', photo:'images/travel_demo.png', logo:'', desc:'Confirmed Train ticket bookings (IRCTC), flight reservations, and long-distance bus tickets.', fee:'Ticket fare + nominal reservation charges', duration:'Instant ticket delivery', active:'TRUE', details:'Get confirmed reservations instantly. We book rail tickets (general and Tatkaal quotas via authorized IRCTC portals), domestic/international flight boarding passes, and sleeper bus reservations.', documents:['Passenger Details (Names, Age, Gender)','Valid Government ID Proof'] },
+        { id:'gas-booking', title:'Gas Cylinder Services', category:'digital', photo:'', logo:'', desc:'New connection registration and fast refill bookings for Bharat, HP, and Indane gas.', fee:'Refill cylinder cost + minimal booking fee', duration:'Refill booking is instant. New connections take 5-7 days.', active:'TRUE', details:'Avoid subsidy delays. We book monthly LPG cylinder refills, apply for new gas connections under government schemes, link bank accounts/Aadhaar for subsidy transfers, and check subsidy payment histories.', documents:['Aadhaar Card','Ration Card copy','Gas consumer booklet','Bank Passbook'] },
+        { id:'digital-signature', title:'Digital Signature (DSC)', category:'digital', photo:'', logo:'https://upload.wikimedia.org/wikipedia/commons/9/9f/Digital_India_logo.svg', desc:'Class 3 Digital Signature Certificate tokens for e-tendering, income tax, and company registration.', fee:'DSC token fee + registration charges', duration:'24 - 48 Hours', active:'TRUE', details:'Obtain secure Class 3 cryptographic digital signatures with USB tokens. Essential for submitting government e-tenders, registering new companies with Ministry of Corporate Affairs, and professional tax filings.', documents:['Aadhaar Card (linked with mobile number)','PAN Card','A 1-minute video verification link completion'] }
+      ];
+    }
+  </script>
+
+</body>
+</html>
